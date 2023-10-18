@@ -1,23 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'package:firebase_database/firebase_database.dart';//RTdatabase
+
 //Initialize Firebase and add plugins
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-);
+
 
 //Initialize Firebase Realtime Database
-import 'package:firebase_database/firebase_database.dart';
+
 
 FirebaseDatabase database = FirebaseDatabase.instance;
 DatabaseReference ref = database.ref();
 
 
-void main() {
+
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+);
   runApp(const MainApp());
+}
+
+//Test realtime database
+getData() async{
+  final response = await ref.child('test').get();
+
+  if(response.exists){
+    print("Return child test: ${response.value}");
+  }
+  else{
+    print('None found');
+  }
 }
 
 class MainApp extends StatelessWidget {
@@ -70,6 +88,7 @@ class _LoginFormState extends State<LoginForm>{
             onPressed: (){
               if(_formKey.currentState!.validate())
                 print("Submitted: ${loginController.text}");
+                getData();
               },
               child: const Text('Submit'),
             )
