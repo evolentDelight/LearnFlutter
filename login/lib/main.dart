@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 void main() {
   runApp(const MainApp());
@@ -61,4 +63,28 @@ class _LoginFormState extends State<LoginForm>{
       ],)
     );
   }
+}
+
+Future<bool> isLoginSuccessful(String login, String pass) async{
+  String token = "";//Retrieve token
+
+  try {
+    final userCredential =
+        await FirebaseAuth.instance.signInWithCustomToken(token);
+    print("Sign-in successful.");
+    return true;
+} on FirebaseAuthException catch (e) {
+    switch (e.code) {
+        case "invalid-custom-token":
+            print("The supplied token is not a Firebase custom auth token.");
+            break;
+        case "custom-token-mismatch":
+            print("The supplied token is for a different Firebase project.");
+            break;
+        default:
+            print("Unkown error.");
+    }
+    return false;
+}
+
 }
