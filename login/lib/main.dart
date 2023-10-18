@@ -9,6 +9,12 @@ await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
 );
 
+//Initialize Firebase Realtime Database
+import 'package:firebase_database/firebase_database.dart';
+
+FirebaseDatabase database = FirebaseDatabase.instance;
+DatabaseReference ref = database.ref();
+
 
 void main() {
   runApp(const MainApp());
